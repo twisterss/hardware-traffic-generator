@@ -14,11 +14,11 @@ Directory structure
 This repository is divided into:
 * _hw_, which contains the code that goes on the board;
 * _sw_, which contains the code to control the board from the computer;
-* _sample_, which contains a sample configuration.
+* _samples_, which contains a sample configuration.
 
-The top file of the hardware code is traffic\_generator.vhd. It has to be included in application.vhd and connected to a FrameLink bus that comes from DMA and goes to OBUF.
+The top file of the hardware code is _traffic\_generator.vhd_. It has to be included in _application.vhd_ and connected to a FrameLink bus that comes from DMA and goes to OBUF.
 
-The traffic\_generator program enables to send configuration from a configuration file (an example is available in the sample directory).
+The _traffic\_generator_ program enables to send configuration from a configuration file (an example is available in the sample directory).
 
 Development status
 ------------------
