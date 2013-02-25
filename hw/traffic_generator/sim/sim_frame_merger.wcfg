@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/homes/tgroleat/Documents/These/Xilinx/analyse-trafic-fpga/xilinx/traffic-generator/tb_frame_merger_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb_frame_merger" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="21" />
+   <wvobject fp_name="/tb_frame_merger/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_rem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_rem[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_rem[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_sof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_sof_n</obj_property>
+      <obj_property name="ObjectShortName">rx_sof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_eof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_eof_n</obj_property>
+      <obj_property name="ObjectShortName">rx_eof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_sop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_sop_n</obj_property>
+      <obj_property name="ObjectShortName">rx_sop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_eop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_eop_n</obj_property>
+      <obj_property name="ObjectShortName">rx_eop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_src_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_src_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">rx_src_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/rx_dst_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_dst_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">rx_dst_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_rem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_rem[2:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_rem[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_sof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_sof_n</obj_property>
+      <obj_property name="ObjectShortName">tx_sof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_eof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_eof_n</obj_property>
+      <obj_property name="ObjectShortName">tx_eof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_sop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_sop_n</obj_property>
+      <obj_property name="ObjectShortName">tx_sop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_eop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_eop_n</obj_property>
+      <obj_property name="ObjectShortName">tx_eop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_src_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_src_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">tx_src_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/tx_dst_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_dst_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">tx_dst_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/uut/last_part" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">last_part</obj_property>
+      <obj_property name="ObjectShortName">last_part</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_frame_merger/uut/new_frame" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">new_frame</obj_property>
+      <obj_property name="ObjectShortName">new_frame</obj_property>
+   </wvobject>
+</wave_config>

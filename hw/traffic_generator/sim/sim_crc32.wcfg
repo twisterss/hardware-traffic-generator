@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/homes/tgroleat/Documents/These/Xilinx/analyse-trafic-fpga/xilinx/traffic-generator/tb_crc32_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb_crc32" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="11" />
+   <wvobject fp_name="/tb_crc32/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/crc_inv_in" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">crc_inv_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">crc_inv_in[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/data_bytes" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_bytes[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data_bytes[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">en</obj_property>
+      <obj_property name="ObjectShortName">en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/uut/data_xor" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_xor[63:0]</obj_property>
+      <obj_property name="ObjectShortName">data_xor[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/uut/data_xor_sel" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_xor_sel[63:0]</obj_property>
+      <obj_property name="ObjectShortName">data_xor_sel[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/crc_inv_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">crc_inv_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">crc_inv_out[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/crc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">crc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">crc[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/expected_crc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_crc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_crc[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_crc32/error" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">error</obj_property>
+      <obj_property name="ObjectShortName">error</obj_property>
+   </wvobject>
+</wave_config>

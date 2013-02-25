@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/homes/tgroleat/Documents/These/Xilinx/analyse-trafic-fpga/xilinx/traffic-generator/tb_control_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb_control" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="29" />
+   <wvobject fp_name="/tb_control/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_rem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_rem[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_rem[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_sof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_sof_n</obj_property>
+      <obj_property name="ObjectShortName">rx_sof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_eof_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_eof_n</obj_property>
+      <obj_property name="ObjectShortName">rx_eof_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_sop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_sop_n</obj_property>
+      <obj_property name="ObjectShortName">rx_sop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_eop_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_eop_n</obj_property>
+      <obj_property name="ObjectShortName">rx_eop_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_src_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_src_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">rx_src_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/rx_dst_rdy_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_dst_rdy_n</obj_property>
+      <obj_property name="ObjectShortName">rx_dst_rdy_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/tx_eof_will_be_sent" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_eof_will_be_sent</obj_property>
+      <obj_property name="ObjectShortName">tx_eof_will_be_sent</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/flows_counter" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">flows_counter[1:0]</obj_property>
+      <obj_property name="ObjectShortName">flows_counter[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/flows_counter_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flows_counter_en</obj_property>
+      <obj_property name="ObjectShortName">flows_counter_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/flows_counter_reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flows_counter_reset</obj_property>
+      <obj_property name="ObjectShortName">flows_counter_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/tx_sending_eof" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_sending_eof[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_sending_eof[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/uut/flows_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">flows_ready</obj_property>
+      <obj_property name="ObjectShortName">flows_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/action" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">action[31:0]</obj_property>
+      <obj_property name="ObjectShortName">action[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/action_ack" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">action_ack</obj_property>
+      <obj_property name="ObjectShortName">action_ack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/status" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">status[31:0]</obj_property>
+      <obj_property name="ObjectShortName">status[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/reconf" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">reconf[1:0]</obj_property>
+      <obj_property name="ObjectShortName">reconf[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_rem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_rem[5:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_rem[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_sof_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_sof_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_sof_n[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_eof_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_eof_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_eof_n[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_sop_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_sop_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_sop_n[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_eop_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_eop_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_eop_n[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_src_rdy_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_src_rdy_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_src_rdy_n[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_control/tx_dst_rdy_n" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_dst_rdy_n[1:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_dst_rdy_n[1:0]</obj_property>
+   </wvobject>
+</wave_config>
