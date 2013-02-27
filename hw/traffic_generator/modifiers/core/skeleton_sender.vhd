@@ -12,8 +12,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity skeleton_sender is
     generic (
-        ID              : in std_logic_vector(7 downto 0) := X"01";
-        START_ID        : in std_logic_vector(7 downto 0) := X"00"
+        ID              : std_logic_vector(7 downto 0) := X"01";
+        START_ID        : std_logic_vector(7 downto 0) := X"00"
     );
     port (
         CLK             : in std_logic;
