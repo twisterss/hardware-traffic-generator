@@ -234,7 +234,7 @@ int read_status() {
     // Print the current status
     char* generator_status;
     if (status == 1)
-        generator_status = "receiving configuration";
+        generator_status = "ready to receive configuration";
     else if (status == 2)
         generator_status = "fully configured";
     else if (status == 3)

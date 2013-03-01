@@ -10,7 +10,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity traffic_generator is
     Generic (
-        FLOW_COUNT      : integer := 2
+        FLOW_COUNT      : integer := 1
     );
     Port (
         CLK             : in std_logic;
