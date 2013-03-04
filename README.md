@@ -27,9 +27,9 @@ This repository is divided into:
 * `sw`, which contains the code to control the board from the computer;
 * `samples`, which contains a sample configuration.
 
-The top file of the hardware code is `traffic_generator.vhd`. It has to be included in `application.vhd` and connected to a FrameLink bus that comes from DMA and goes to OBUF.
+The top file of the hardware code is `traffic_generator.vhd` ([see documentation](hw/traffic_generator)). It has to be included in `application.vhd` and connected to a FrameLink bus that comes from DMA and goes to OBUF.
 
-The `traffic_generator` program enables to send configuration from a configuration file (an example is available in the sample directory).
+The `traffic_generator` program ([see documentation](sw/traffic_generator)) enables to send configuration from a configuration file (an example is available in the sample directory).
 
 Development status
 ------------------
