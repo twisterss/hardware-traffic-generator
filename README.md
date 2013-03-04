@@ -14,23 +14,26 @@ As the implementation is made for [the NetCOPE platform](http://www.invea-tech.c
 
 ### Software
 
-The VHDL code provided has no dependencies to the NetCOPE platform. You can simulate and synthesize the top _traffic\_generator_ module using just Xilinx ISE for example (tested with version 13). To use it on the board, integrate it in a NetCOPE _application.vhd_ file.
+The VHDL code provided has no dependencies to the NetCOPE platform. You can simulate and synthesize the top `traffic_generator` entity using just Xilinx ISE for example (tested with version 13). To use it on the board, integrate it in a NetCOPE `application.vhd` file.
 
-The C code has dependencies to the NetCOPE platform, it must be compiled on a platform with NetCOPE installed. A _Makefile_ is provided.
+The C code has dependencies to the NetCOPE platform, it must be compiled on a platform with NetCOPE installed. A `Makefile` is provided.
 
 Directory structure
 -------------------
 
 This repository is divided into:
-* _hw_, which contains the code that goes on the board;
-* _sw_, which contains the code to control the board from the computer;
-* _samples_, which contains a sample configuration.
 
-The top file of the hardware code is _traffic\_generator.vhd_. It has to be included in _application.vhd_ and connected to a FrameLink bus that comes from DMA and goes to OBUF.
+* `hw`, which contains the code that goes on the board;
+* `sw`, which contains the code to control the board from the computer;
+* `samples`, which contains a sample configuration.
 
-The _traffic\_generator_ program enables to send configuration from a configuration file (an example is available in the sample directory).
+The top file of the hardware code is `traffic_generator.vhd`. It has to be included in `application.vhd` and connected to a FrameLink bus that comes from DMA and goes to OBUF.
+
+The `traffic_generator` program enables to send configuration from a configuration file (an example is available in the sample directory).
 
 Development status
 ------------------
 
 Currently, the generator works and sends traffic at the expected speed. Some modifier blocks will not be available on this repository until Mid-March because students are working on them for a project. If you need these files, send us an email.
+
+Documentation is at an early stage, so if you have trouble understanding how to use or extend the generator, do not hesitate to send us an email.

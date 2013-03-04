@@ -1,5 +1,10 @@
 ----------------------------------------------------------------------------------
 -- Make framelink data available for debug
+-- This just stores received data and makes them available as output
+-- at each OUT_CLK rising edge. This clock may be fully desynchronized 
+-- from CLK. 
+-- Use it with memory-mapped registers to see what was received.
+-- Use a write register for OUT_CLK and read registers for bus data.
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Dumps debug registers of the design
+# Sends an action if passed as argument
 
 echo "Current status: "
 csbus 0x80000

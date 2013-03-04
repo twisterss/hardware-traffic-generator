@@ -1,8 +1,19 @@
 ----------------------------------------------------------------------------------
 -- Top of the traffic generator, to be included directly in the application
---  * receive the configuration as input
---  * send traffic as output
---  * action and status should be connected to the computer
+--
+--  * receive the configuration as input using the RX FrameLink bus
+--
+--  * send traffic as output using the TX FrameLink bus
+--
+--  * action and status should be connected to the computer:
+--      * action should be set by the computer to the wanted action number
+--      or 0 if no action is requested (see the controller for a list of actions).
+--      * When action_ack is set to 1, action should be set back to 0 at next clock
+--      cycle.
+--      The current value of action should also be sent to the computer to acknowledge
+--      when an action has been taken into account.
+--      * status is the current status of the generator (see the controller for a
+--      list of statuses), it should be sent to the computer.
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
