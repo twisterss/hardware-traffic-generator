@@ -6,7 +6,17 @@ This is a 10 Gbit/s Ethernet FPGA-based traffic generator. It is designed to be 
 Environment
 -----------
 
-This implementation is for the COMBO-LXT board with a COMBOI-10G2 interface extension.
+### Hardware
+
+This implementation is tested with the [COMBO-LXT board](http://www.invea-tech.com/products-and-services/combo-fpga-boards/combo-lxt) with a [COMBOI-10G2](http://www.invea-tech.com/products-and-services/combo-fpga-boards/comboi-10g2) interface extension. The board must be plugged in a PCI port of a hosting machine.
+
+As the implementation is made for [the NetCOPE platform](http://www.invea-tech.com/products-and-services/netcope-fpga-platform), it should work with few changes on any board supported by the platform, including the NetFPGA 10G. 
+
+### Software
+
+The VHDL code provided has no dependencies to the NetCOPE platform. You can simulate and synthesize the top _traffic\_generator_ module using just Xilinx ISE for example (tested with version 13). To use it on the board, integrate it in a NetCOPE _application.vhd_ file.
+
+The C code has dependencies to the NetCOPE platform, it must be compiled on a platform with NetCOPE installed. A _Makefile_ is provided.
 
 Directory structure
 -------------------
