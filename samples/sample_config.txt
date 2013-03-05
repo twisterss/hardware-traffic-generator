@@ -1,5 +1,5 @@
 -- This file represents a full configuration
--- of one flow generator.
+-- of two flow generators.
 --
 -- Parts of configuration are separated by:
 -- - if the following part is the last for this flow generator:
@@ -13,7 +13,8 @@
 -- FFFFFFFF
 -- $
 
--- A sample configuration part
+-- First flow configuration
+-- A sample dummy configuration part
 00000000
 00000000
 $
@@ -37,10 +38,10 @@ EAAAAAAA
 014018AA
 # 
 -- a sample skeleton_sender configuration part (ID: 01)
-00000000
-00000000
+FFFFFFFF
+FFFFFFFF
 $
-0A00001C
+0A000044
 01000000
 9ABCDEF1
 12345678
@@ -50,45 +51,40 @@ BCDEF123
 3456789A
 CDEF1234
 456789AB
+DEF12345
+56789ABC
+EF123456
+6789ABCD
+F1234567
+789ABCDE
+12345678
+89ABCDEF
+FFFFFFFF
+00000000
 #
--- an other sample configuration part
+-- a sample second flow configuration
+-- with only a skeleton_sender (ID: 01)
 FFFFFFFF
 FFFFFFFF
 $
-AAAAAAAA
-AAAAAAAA
-9ABCDEF1
-12345678
-AAAAAAAA
-BAAAAAAA
-AAAAAAAA
-CAAAAAAA
-AAAAAAAA
-DAAAAAAA
-AAAAAAAA
-12A125AA
-AAAAAAAA
-FAAAAAAA
-AAAAAAAA
-0AAAAAAA
-AAAAAAAA
-1AAAAAAA
-00000000
-00000000
-9AAAAAAA
-12345678
-78945162
-AAAAAAAA
-12434656
-AAAAFAAA
-AAAAAAAA
-AAAAAAAD
+0A000048
+01000000
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
+22222222
+11111111
 FFFFFFFF
-FFFFFFFF
-AADAAAAA
-AAAAAAEA
-AAAAAAAA
-AAAAFAAA
-AAAAAAAA
-AAAAAACA
 #
