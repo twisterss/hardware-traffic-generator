@@ -34,6 +34,6 @@ The `traffic_generator` program ([see documentation](sw/traffic_generator)) enab
 Development status
 ------------------
 
-Currently, the generator works and sends traffic at the expected speed. Some modifier blocks will not be available on this repository until Mid-March because students are working on them for a project. If you need these files, send us an email.
+Currently, the generator works and sends traffic at the expected speed. We are actively working on some modifier blocks that will be committed soon. Send us an email if you feel some blocks should be there and are not.
 
 Documentation is at an early stage, so if you have trouble understanding how to use or extend the generator, do not hesitate to send us an email.
