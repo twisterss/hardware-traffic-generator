@@ -5,7 +5,8 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
-use work.math_pack.all;
+use IEEE.MATH_REAL.log2;
+use IEEE.MATH_REAL.ceil;
 
 entity FRAME_FIFO is
     generic (
@@ -24,7 +25,7 @@ entity FRAME_FIFO is
 
         -- RX FrameLink interface
         RX_DATA      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
-        RX_REM       : in  std_logic_vector(log2(DATA_WIDTH/8) - 1 downto 0);
+        RX_REM       : in  std_logic_vector(integer(ceil(log2(real(DATA_WIDTH/8)))) - 1 downto 0);
         RX_SOF_N     : in  std_logic;
         RX_EOF_N     : in  std_logic;
         RX_SOP_N     : in  std_logic;
@@ -34,7 +35,7 @@ entity FRAME_FIFO is
 
         -- TX FrameLink interface
         TX_DATA      : out std_logic_vector(DATA_WIDTH-1 downto 0);
-        TX_REM       : out std_logic_vector(log2(DATA_WIDTH/8) - 1 downto 0);
+        TX_REM       : out std_logic_vector(integer(ceil(log2(real(DATA_WIDTH/8)))) - 1 downto 0);
         TX_SOF_N     : out std_logic;
         TX_EOF_N     : out std_logic;
         TX_SOP_N     : out std_logic;
@@ -47,7 +48,7 @@ end entity FRAME_FIFO;
 architecture behavioral of FRAME_FIFO is
 
     -- FIFO width: with control signals
-    constant FIFO_DATA_WIDTH : integer := DATA_WIDTH + log2(DATA_WIDTH/8) + 4;
+    constant FIFO_DATA_WIDTH : integer := DATA_WIDTH + integer(ceil(log2(real(DATA_WIDTH/8)))) + 4;
 
     -- -----------------------------------------------------------------
     -- Signals
@@ -69,14 +70,14 @@ architecture behavioral of FRAME_FIFO is
 
     -- Keep data
     signal tx_data_read  : std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal tx_rem_read   : std_logic_vector(log2(DATA_WIDTH/8) - 1 downto 0);
+    signal tx_rem_read   : std_logic_vector(integer(ceil(log2(real(DATA_WIDTH/8)))) - 1 downto 0);
     signal tx_sof_n_read : std_logic;
     signal tx_eof_n_read : std_logic;
     signal tx_sop_n_read : std_logic;
     signal tx_eop_n_read : std_logic;
 
     signal tx_data_keep  : std_logic_vector(DATA_WIDTH-1 downto 0);
-    signal tx_rem_keep   : std_logic_vector(log2(DATA_WIDTH/8) - 1 downto 0);
+    signal tx_rem_keep   : std_logic_vector(integer(ceil(log2(real(DATA_WIDTH/8)))) - 1 downto 0);
     signal tx_sof_n_keep : std_logic;
     signal tx_eof_n_keep : std_logic;
     signal tx_sop_n_keep : std_logic;

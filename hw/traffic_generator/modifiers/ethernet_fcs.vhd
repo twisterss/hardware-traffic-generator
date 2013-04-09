@@ -1,17 +1,22 @@
 ----------------------------------------------------------------------------------
 -- Computes and sets the FCS field of Ethernet (CRC32 calculation)
--- This module receives and forwards the first flow configuration frame
--- but does not need any configuration for itself. It starts setting
--- the FCS field on the second frame.
--- A delay of 1 clock cycle is incurred on the bus, processing is
--- never stopped.
+-- This modifier sets the FCS field on the last bytes of each frame if configured.
+-- A delay of 1 clock cycle is incurred on the bus, processing is never stopped.
+--
+-- Configuration:
+-- - First (and only) word:
+--      - id: 8 bits
+--      - padding
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ethernet_fcs is
-    Port (
+    generic (
+        ID              : std_logic_vector(7 downto 0) := X"02"
+    );
+    port (
         CLK             : in std_logic;
         RESET           : in std_logic;
         -- Input FrameLink
@@ -40,7 +45,7 @@ end ethernet_fcs;
 architecture Behavioral of ethernet_fcs is
 
     -- FSM
-    type fsm_state is (SkipConfigure, WaitForFrameLength, SkipNetcopeHeader, InFrame);
+    type fsm_state is (WaitingConfig, Transparent, WaitForFrameLength, SkipNetcopeHeader, InFrame);
     signal state                    : fsm_state;
     signal state_nxt                : fsm_state;
 
@@ -73,7 +78,7 @@ begin
     -- FSM
     fsm_sync: process (RESET, CLK) begin
         if (RESET = '1') then
-            state <= SkipConfigure;
+            state <= WaitingConfig;
         elsif (rising_edge(CLK)) then
             state <= state_nxt;
         end if;
@@ -85,11 +90,18 @@ begin
         in_frame_data <= '0';
 
         case state is
-            when SkipConfigure =>
-                if (fl_receiving = '1' and RX_EOF_N = '0') then
-                    -- Received the end of the first (config) frame
-                    state_nxt <= WaitForFrameLength;
+            when WaitingConfig =>
+                if (fl_receiving = '1') then
+                    if (RX_SOP_N ='0' and RX_DATA(63 downto 56) = ID) then
+                        -- Received the proper configuration word
+                        state_nxt <= WaitForFrameLength;
+                    elsif (RX_EOF_N = '0') then
+                        -- End of configuration without being configured
+                        state_nxt <= Transparent;
+                    end if;
                 end if;
+            when Transparent =>
+                -- Nothing to do: forward traffic
             when WaitForFrameLength =>
                 if (fl_receiving = '1' and RX_SOF_N = '0') then
                     -- Received the first word of a frame
@@ -111,11 +123,12 @@ begin
                     -- Received the last word of the frame
                     state_nxt <= WaitForFrameLength;
                 end if;
+            when others =>
         end case;
 
         -- Restart signal watched in all states
         if (RECONF = '1') then
-            state_nxt <= SkipConfigure;
+            state_nxt <= WaitingConfig;
         end if;
     end process;
 
