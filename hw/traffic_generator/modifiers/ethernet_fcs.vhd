@@ -73,7 +73,43 @@ architecture Behavioral of ethernet_fcs is
     signal tx_data_crc              : std_logic_vector(63 downto 0);
     signal fl_receiving             : std_logic;
 
+    -- Input signals (registered)
+    signal rx_data_int              : std_logic_vector(63 downto 0);
+    signal rx_rem_int               : std_logic_vector(2 downto 0);
+    signal rx_sof_n_int             : std_logic;
+    signal rx_eof_n_int             : std_logic;
+    signal rx_sop_n_int             : std_logic;
+    signal rx_eop_n_int             : std_logic;
+    signal rx_src_rdy_n_int         : std_logic;
+    signal rx_dst_rdy_n_int         : std_logic;
 begin
+
+    -- Tiny fifo to cut the input critical path only
+    frame_fifo : entity work.FRAME_FIFO
+        generic map(
+            DATA_WIDTH  => 64,
+            DEPTH       => 1
+        )
+        port map(
+            CLK         => CLK,
+            RESET           => RESET,
+            RX_DATA         => RX_DATA,
+            RX_REM          => RX_REM,
+            RX_SOF_N        => RX_SOF_N,
+            RX_EOF_N        => RX_EOF_N,
+            RX_SOP_N        => RX_SOP_N,
+            RX_EOP_N        => RX_EOP_N,
+            RX_SRC_RDY_N    => RX_SRC_RDY_N,
+            RX_DST_RDY_N    => RX_DST_RDY_N,
+            TX_DATA         => rx_data_int,
+            TX_REM          => rx_rem_int,
+            TX_SOF_N        => rx_sof_n_int,
+            TX_EOF_N        => rx_eof_n_int,
+            TX_SOP_N        => rx_sop_n_int,
+            TX_EOP_N        => rx_eop_n_int,
+            TX_SRC_RDY_N    => rx_src_rdy_n_int,
+            TX_DST_RDY_N    => rx_dst_rdy_n_int
+        );
 
     -- FSM
     fsm_sync: process (RESET, CLK) begin
@@ -84,7 +120,7 @@ begin
         end if;
     end process;
 
-    fsm_async: process (state, fl_receiving, RX_SOP_N, RX_EOP_N, RX_DATA, RX_SOF_N, RX_EOF_N, RECONF) begin
+    fsm_async: process (state, fl_receiving, rx_sop_n_int, rx_eop_n_int, rx_data_int, rx_sof_n_int, rx_eof_n_int, RECONF) begin
         state_nxt <= state;
         store_length <= '0';
         in_frame_data <= '0';
@@ -92,10 +128,10 @@ begin
         case state is
             when WaitingConfig =>
                 if (fl_receiving = '1') then
-                    if (RX_SOP_N ='0' and RX_DATA(63 downto 56) = ID) then
+                    if (rx_sop_n_int ='0' and rx_data_int(63 downto 56) = ID) then
                         -- Received the proper configuration word
                         state_nxt <= WaitForFrameLength;
-                    elsif (RX_EOF_N = '0') then
+                    elsif (rx_eof_n_int = '0') then
                         -- End of configuration without being configured
                         state_nxt <= Transparent;
                     end if;
@@ -103,23 +139,23 @@ begin
             when Transparent =>
                 -- Nothing to do: forward traffic
             when WaitForFrameLength =>
-                if (fl_receiving = '1' and RX_SOF_N = '0') then
+                if (fl_receiving = '1' and rx_sof_n_int = '0') then
                     -- Received the first word of a frame
                     store_length <= '1';
-                    if (RX_EOP_N = '0') then
+                    if (rx_eop_n_int = '0') then
                         state_nxt <= InFrame;
                     else
                         state_nxt <= SkipNetcopeHeader;
                     end if;
                 end if;
             when SkipNetcopeHeader =>
-                if (fl_receiving = '1' and RX_EOP_N = '0') then
+                if (fl_receiving = '1' and rx_eop_n_int = '0') then
                     -- End of NetCOPE header
                     state_nxt <= InFrame;
                 end if;
             when InFrame =>
                 in_frame_data <= '1';
-                if (fl_receiving = '1' and RX_EOF_N = '0') then
+                if (fl_receiving = '1' and rx_eof_n_int = '0') then
                     -- Received the last word of the frame
                     state_nxt <= WaitForFrameLength;
                 end if;
@@ -138,7 +174,7 @@ begin
     manage_pos:process (CLK) begin
         if (rising_edge(CLK)) then
             if (store_length = '1') then
-                remaining_bytes <= unsigned(RX_DATA(15 downto 0)) - 16;
+                remaining_bytes <= unsigned(rx_data_int(15 downto 0)) - 16;
                 first_word <= '1';
             elsif (in_frame_data = '1' and fl_receiving = '1') then
                 remaining_bytes <= remaining_bytes - 8;
@@ -155,7 +191,7 @@ begin
     PORT MAP (
         CLK => CLK,
         CRC_INV_IN => crc_inv_in,
-        DATA => RX_DATA,
+        DATA => rx_data_int,
         DATA_BYTES => crc_data_bytes,
         EN => crc_data_received,
         CRC_INV_OUT => crc_inv_out,
@@ -193,8 +229,8 @@ begin
         end case;
     end process;
 
-    fl_receiving <= '1' when (RX_SRC_RDY_N = '0' and TX_DST_RDY_N = '0') else '0';
-    RX_DST_RDY_N <= TX_DST_RDY_N;
+    fl_receiving <= '1' when (rx_src_rdy_n_int = '0' and TX_DST_RDY_N = '0') else '0';
+    rx_dst_rdy_n_int <= TX_DST_RDY_N;
     TX_DATA <= rx_data_stored when (in_frame_data_stored = '0') else tx_data_crc;
     send_data:process (CLK, RESET) begin
         if (RESET = '1') then
@@ -205,13 +241,13 @@ begin
                 -- Forget data remaining to send if reconf
                 TX_SRC_RDY_N <= '1';
             elsif (TX_DST_RDY_N = '0') then
-                rx_data_stored <= RX_DATA;
-                TX_REM <= RX_REM;
-                TX_SOF_N <= RX_SOF_N;
-                TX_EOF_N <= RX_EOF_N;
-                TX_SOP_N <= RX_SOP_N;
-                TX_EOP_N <= RX_EOP_N;
-                TX_SRC_RDY_N <= RX_SRC_RDY_N;
+                rx_data_stored <= rx_data_int;
+                TX_REM <= rx_rem_int;
+                TX_SOF_N <= rx_sof_n_int;
+                TX_EOF_N <= rx_eof_n_int;
+                TX_SOP_N <= rx_sop_n_int;
+                TX_EOP_N <= rx_eop_n_int;
+                TX_SRC_RDY_N <= rx_src_rdy_n_int;
                 in_frame_data_stored <= in_frame_data;
                 remaining_bytes_stored <= remaining_bytes;
             end if;
