@@ -36,7 +36,7 @@ end flow_generator;
 architecture Behavioral of flow_generator is
 
     -- Number of signals that should link modifiers
-    constant LINK_SIGNALS   : integer := 2;
+    constant LINK_SIGNALS   : integer := 4;
 
     type data_array is array(0 to LINK_SIGNALS-1) of std_logic_vector(63 downto 0);
     type rem_array is array(0 to LINK_SIGNALS-1) of std_logic_vector(2 downto 0);
@@ -78,9 +78,11 @@ begin
         RECONF => RECONF
     );
 
-    -- Ethernet FCS computation
-    eth_fcs: entity work.ethernet_fcs
-    port map (
+    -- Checksum computer 1
+    checksum: entity work.checksum
+    generic map (
+        ID => X"03"
+    ) port map (
         CLK => CLK,
         RESET => RESET,
         RX_DATA => link_data(0),
@@ -102,9 +104,11 @@ begin
         RECONF => RECONF
     );
 
-    -- Configuration remover
-    config_rm: entity work.config_remover
-    port map (
+    -- Checksum computer 2
+    checksum2: entity work.checksum
+    generic map (
+        ID => X"04"
+    ) port map (
         CLK => CLK,
         RESET => RESET,
         RX_DATA => link_data(1),
@@ -115,6 +119,56 @@ begin
         RX_EOP_N => link_eop_n(1),
         RX_SRC_RDY_N => link_src_rdy_n(1),
         RX_DST_RDY_N => link_dst_rdy_n(1),
+        TX_DATA => link_data(2),
+        TX_REM => link_rem(2),
+        TX_SOF_N => link_sof_n(2),
+        TX_EOF_N => link_eof_n(2),
+        TX_SOP_N => link_sop_n(2),
+        TX_EOP_N => link_eop_n(2),
+        TX_SRC_RDY_N => link_src_rdy_n(2),
+        TX_DST_RDY_N => link_dst_rdy_n(2),
+        RECONF => RECONF
+    );
+
+    -- Ethernet FCS computation
+    eth_fcs: entity work.ethernet_fcs
+    generic map (
+        ID => X"02"
+    ) port map (
+        CLK => CLK,
+        RESET => RESET,
+        RX_DATA => link_data(2),
+        RX_REM => link_rem(2),
+        RX_SOF_N => link_sof_n(2),
+        RX_EOF_N => link_eof_n(2),
+        RX_SOP_N => link_sop_n(2),
+        RX_EOP_N => link_eop_n(2),
+        RX_SRC_RDY_N => link_src_rdy_n(2),
+        RX_DST_RDY_N => link_dst_rdy_n(2),
+        TX_DATA => link_data(3),
+        TX_REM => link_rem(3),
+        TX_SOF_N => link_sof_n(3),
+        TX_EOF_N => link_eof_n(3),
+        TX_SOP_N => link_sop_n(3),
+        TX_EOP_N => link_eop_n(3),
+        TX_SRC_RDY_N => link_src_rdy_n(3),
+        TX_DST_RDY_N => link_dst_rdy_n(3),
+        RECONF => RECONF
+    );
+
+    -- Configuration remover
+    config_rm: entity work.config_remover
+    port map (
+        CLK => CLK,
+        RESET => RESET,
+        RX_DATA => link_data(3),
+        RX_REM => link_rem(3),
+        RX_SOF_N => link_sof_n(3),
+        RX_EOF_N => link_eof_n(3),
+        RX_SOP_N => link_sop_n(3),
+        RX_EOP_N => link_eop_n(3),
+        RX_SRC_RDY_N => link_src_rdy_n(3),
+        RX_DST_RDY_N => link_dst_rdy_n(3),
         TX_DATA => TX_DATA,
         TX_REM => TX_REM,
         TX_SOF_N => TX_SOF_N,
