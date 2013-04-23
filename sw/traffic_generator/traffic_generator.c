@@ -14,11 +14,12 @@ int read_frame(FILE* file, char* hw_data, size_t* hw_data_len, char* data, size_
     char_val[2] = '\0';
     char frame_ok = 0;
     int i;
+    int result;
     // Read the file until an end of frame is found
     while (fgets(line, sizeof(line), file) != NULL)
     {
         char value[1024] = "";
-        int result = sscanf(line, "%8[$#0123456789ABCDEF]", value);
+        result = sscanf(line, "%8[$#0123456789ABCDEFabcdef]", value);
         if (result != 1)
             continue;
         if (value[0] == '$') {
@@ -30,6 +31,7 @@ int read_frame(FILE* file, char* hw_data, size_t* hw_data_len, char* data, size_
             frame_ok = 1;
             break;
         }
+
         for (i = 3; i >= 0; i--) {
             char_val[0] = value[i*2];
             char_val[1] = value[i*2+1];
