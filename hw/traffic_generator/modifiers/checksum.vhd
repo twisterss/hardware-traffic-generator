@@ -479,7 +479,7 @@ begin
             else
                 case insert_shift(3 downto 0) is
                     when X"0" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 8) & checksum_out(7 downto 0);
+                        TX_DATA <= ffifo_tx_data(63 downto 8) & checksum_out(15 downto 8);
                     when X"1" => 
                         TX_DATA <= ffifo_tx_data(63 downto 16) & checksum_out;
                     when X"2" => 
@@ -495,7 +495,7 @@ begin
                     when X"7" => 
                         TX_DATA <= checksum_out & ffifo_tx_data(47 downto 0);
                     when X"8" => 
-                        TX_DATA <= checksum_out(15 downto 8) & ffifo_tx_data(55 downto 0);
+                        TX_DATA <= checksum_out(7 downto 0) & ffifo_tx_data(55 downto 0);
                     when others =>
                         TX_DATA <= (others => '-');
                 end case;

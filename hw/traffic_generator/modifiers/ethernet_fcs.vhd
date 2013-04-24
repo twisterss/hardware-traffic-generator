@@ -203,11 +203,11 @@ begin
         -- choose where the CRC should be sent
         case remaining_bytes_stored is
             when X"000B" =>
-                tx_data_crc <= crc(31 downto 24) & rx_data_stored(55 downto 0);
+                tx_data_crc <= crc(7 downto 0) & rx_data_stored(55 downto 0);
             when X"000A" =>
-                tx_data_crc <= crc(31 downto 16) & rx_data_stored(47 downto 0);
+                tx_data_crc <= crc(15 downto 0) & rx_data_stored(47 downto 0);
             when X"0009" =>
-                tx_data_crc <= crc(31 downto 8) & rx_data_stored(39 downto 0);
+                tx_data_crc <= crc(23 downto 0) & rx_data_stored(39 downto 0);
             when X"0008" =>
                 tx_data_crc <= crc & rx_data_stored(31 downto 0);
             when X"0007" =>
@@ -219,11 +219,11 @@ begin
             when X"0004" =>
                 tx_data_crc <= X"00000000" & crc;
             when X"0003" =>
-                tx_data_crc <= X"0000000000" & crc(23 downto 0);
+                tx_data_crc <= X"0000000000" & crc(31 downto 8);
             when X"0002" =>
-                tx_data_crc <= X"000000000000" & crc(15 downto 0);
+                tx_data_crc <= X"000000000000" & crc(31 downto 16);
             when X"0001" =>
-                tx_data_crc <= X"00000000000000" & crc(7 downto 0);
+                tx_data_crc <= X"00000000000000" & crc(31 downto 24);
             when others =>
                 tx_data_crc <= rx_data_stored;
         end case;
