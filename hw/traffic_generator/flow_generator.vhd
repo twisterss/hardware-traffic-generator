@@ -36,7 +36,7 @@ end flow_generator;
 architecture Behavioral of flow_generator is
 
     -- Number of signals that should link modifiers
-    constant LINK_SIGNALS   : integer := 4;
+    constant LINK_SIGNALS   : integer := 5;
 
     type data_array is array(0 to LINK_SIGNALS-1) of std_logic_vector(63 downto 0);
     type rem_array is array(0 to LINK_SIGNALS-1) of std_logic_vector(2 downto 0);
@@ -156,9 +156,11 @@ begin
         RECONF => RECONF
     );
 
-    -- Configuration remover
-    config_rm: entity work.config_remover
-    port map (
+    -- Packet rate limiter
+    rate: entity work.rate
+    generic map (
+        ID => X"05"
+    ) port map (
         CLK => CLK,
         RESET => RESET,
         RX_DATA => link_data(3),
@@ -169,6 +171,30 @@ begin
         RX_EOP_N => link_eop_n(3),
         RX_SRC_RDY_N => link_src_rdy_n(3),
         RX_DST_RDY_N => link_dst_rdy_n(3),
+        TX_DATA => link_data(4),
+        TX_REM => link_rem(4),
+        TX_SOF_N => link_sof_n(4),
+        TX_EOF_N => link_eof_n(4),
+        TX_SOP_N => link_sop_n(4),
+        TX_EOP_N => link_eop_n(4),
+        TX_SRC_RDY_N => link_src_rdy_n(4),
+        TX_DST_RDY_N => link_dst_rdy_n(4),
+        RECONF => RECONF
+    );
+
+    -- Configuration remover
+    config_rm: entity work.config_remover
+    port map (
+        CLK => CLK,
+        RESET => RESET,
+        RX_DATA => link_data(4),
+        RX_REM => link_rem(4),
+        RX_SOF_N => link_sof_n(4),
+        RX_EOF_N => link_eof_n(4),
+        RX_SOP_N => link_sop_n(4),
+        RX_EOP_N => link_eop_n(4),
+        RX_SRC_RDY_N => link_src_rdy_n(4),
+        RX_DST_RDY_N => link_dst_rdy_n(4),
         TX_DATA => TX_DATA,
         TX_REM => TX_REM,
         TX_SOF_N => TX_SOF_N,
