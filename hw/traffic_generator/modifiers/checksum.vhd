@@ -94,6 +94,7 @@ architecture Behavioral of checksum is
     signal ffifo_rx_src_rdy_n   : std_logic;
     signal ffifo_rx_dst_rdy_n   : std_logic;
     signal ffifo_tx_data        : std_logic_vector(63 downto 0);
+    signal ffifo_tx_rem         : std_logic_vector(2 downto 0);
     signal ffifo_tx_sof_n       : std_logic;
     signal ffifo_tx_eof_n       : std_logic;
     signal ffifo_tx_sop_n       : std_logic;
@@ -113,7 +114,7 @@ architecture Behavioral of checksum is
     function init_ipv4_mask return ipv4_mask_array is
         variable mask : ipv4_mask_array;
         variable shifted_full_mask : std_logic_vector(IPV4_MASK_BYTES*8-1 downto 0);
-        constant full_mask : std_logic_vector(IPV4_MASK_BYTES*8-1 downto 0) := X"FFFFFFFFFFFFFFFF0000FF0000000000FFFF0000";
+        constant full_mask : std_logic_vector(IPV4_MASK_BYTES*8-1 downto 0) := X"FFFFFFFFFFFFFFFF0000FF000000000000000000";
     begin
         -- Store the IPv4 header mask for each shift value
         for i in -7 to IPV4_MASK_BYTES-1 loop
@@ -146,7 +147,7 @@ architecture Behavioral of checksum is
     signal checksum_in          : std_logic_vector(63 downto 0);
     signal checksum_int         : unsigned(31 downto 0);
     signal checksum_int_base    : unsigned(31 downto 0);
-    signal checksum_subtract    : std_logic_vector(15 downto 0);
+    signal checksum_adjust      : std_logic_vector(15 downto 0);
     signal checksum             : std_logic_vector(15 downto 0);
     signal checksum_rdy         : std_logic;
     signal checksum_rdy_reg     : std_logic;
@@ -158,6 +159,12 @@ architecture Behavioral of checksum is
     signal checksum_int_rst     : std_logic;
     signal start_offset         : unsigned(10 downto 0);
     signal end_offset           : unsigned(10 downto 0);
+
+    -- IPv4 payload computation (if IPv4 pseudo-header)
+    signal header_length        : std_logic_vector(15 downto 0);
+    signal total_length         : std_logic_vector(15 downto 0);
+    signal payload_length       : unsigned(15 downto 0);
+    signal payload_length_rdy   : std_logic;
 
     -- Outgoing bytes counter 
     signal bytes_out            : unsigned(10 downto 0);
@@ -214,7 +221,7 @@ begin
 
             -- TX FrameLink interface
             TX_DATA         => ffifo_tx_data,
-            TX_REM          => TX_REM,
+            TX_REM          => ffifo_tx_rem,
             TX_SOF_N        => ffifo_tx_sof_n,
             TX_EOF_N        => ffifo_tx_eof_n,
             TX_SOP_N        => ffifo_tx_sop_n,
@@ -223,19 +230,14 @@ begin
             TX_DST_RDY_N    => ffifo_tx_dst_rdy_n
         );
 
-    -- Frame FIFO connections
+    -- Frame FIFO control
     -- keep_fifo_empty is used to act as if RX and TX were connected without FIFO
     -- stop_sending is used to stop emptying the FIFO
     ffifo_rx_src_rdy_n  <= RX_SRC_RDY_N or (keep_fifo_empty and TX_DST_RDY_N);
     RX_DST_RDY_N        <= rx_dst_rdy_n_int;
     rx_dst_rdy_n_int    <= TX_DST_RDY_N when (keep_fifo_empty = '1') else ffifo_rx_dst_rdy_n;
-    TX_SOF_N            <= ffifo_tx_sof_n;
-    TX_EOF_N            <= ffifo_tx_eof_n;
-    TX_SOP_N            <= ffifo_tx_sop_n;
-    TX_EOP_N            <= ffifo_tx_eop_n;
-    TX_SRC_RDY_N        <= tx_src_rdy_n_int;
-    tx_src_rdy_n_int    <= ffifo_tx_src_rdy_n or stop_sending;
     ffifo_tx_dst_rdy_n  <= TX_DST_RDY_N or stop_sending;
+    tx_src_rdy_n_int    <= ffifo_tx_src_rdy_n or stop_sending;
 
     receiving_data      <= not (RX_SRC_RDY_N or rx_dst_rdy_n_int);
     sending_data        <= not (tx_src_rdy_n_int or TX_DST_RDY_N);
@@ -345,18 +347,47 @@ begin
         end if;
     end process;
 
-    -- Subtraction management: used to
-    -- remove the IP header length if there is a IP pseudo-header:
-    -- the pseudo-header takes the payload size, not the IP size
+    -- Compute the IP payload length if there is a IP pseudo-header
     -- Checked: this field is always valid at the good step in the checksum computation pipeline
-    process(CLK, RESET) begin
+    payload_length <= unsigned(total_length) - unsigned(header_length);
+    process (CLK, RESET) begin
         if (RESET = '1') then
-            checksum_subtract <= (others => '0');
+            payload_length_rdy <= '0';
         elsif (rising_edge(CLK)) then
             if (checksum_en = '1') then
-                if (checksum_type = "01" and bytes_in <= checksum_ip and bytes_in + 7 >= checksum_ip) then
-                    checksum_subtract <= "00" & RX_DATA(to_integer((checksum_ip-bytes_in)*8 + 3) downto to_integer((checksum_ip-bytes_in)*8)) & "00" & X"00";
+                if (checksum_type = "01") then
+                    -- Get header length
+                    if (bytes_in <= checksum_ip and bytes_in + 7 >= checksum_ip) then
+                        header_length <= X"00" & "00" & RX_DATA(to_integer((checksum_ip-bytes_in)*8 + 3) downto to_integer((checksum_ip-bytes_in)*8)) & "00";
+                    end if;
+                    -- Get first byte of total length
+                    if (bytes_in <= checksum_ip+2 and bytes_in + 7 >= checksum_ip+2) then
+                        total_length(15 downto 8) <= RX_DATA(to_integer((checksum_ip+2-bytes_in)*8 + 7) downto to_integer((checksum_ip+2-bytes_in)*8));
+                    end if;
+                    -- Get second byte of total length
+                    if (bytes_in <= checksum_ip+3 and bytes_in + 7 >= checksum_ip+3) then
+                        total_length(7 downto 0) <= RX_DATA(to_integer((checksum_ip+3-bytes_in)*8 + 7) downto to_integer((checksum_ip+3-bytes_in)*8));
+                        payload_length_rdy <= '1';
+                    else
+                        payload_length_rdy <= '0';
+                    end if;
                 end if;
+            else 
+                payload_length_rdy <= '0';
+            end if;
+        end if;
+    end process;
+
+    -- Checksum adjustment: used to add computed fields
+    -- to checksum calculation.
+    -- For now used only to add the payload length if
+    -- there is an IP pseudo-header
+    process (CLK) begin
+        if (rising_edge(CLK)) then
+            if (payload_length_rdy = '1') then
+                checksum_adjust <= std_logic_vector(payload_length(7 downto 0)) & std_logic_vector(payload_length(15 downto 8));
+            else
+                checksum_adjust <= (others => '0');
             end if;
         end if;
     end process;
@@ -386,12 +417,12 @@ begin
     checksum_int_base <= (others => '0') when (checksum_int_rst = '1') else checksum_int;
     process(CLK) begin
         if (rising_edge(CLK)) then
-            -- Sum input data bytes
+            -- Sum input data bytes and the checksum adjustment value if any
             -- The carry is guaranteed to not overflow for much more than the packet size
-            checksum_int <= checksum_int_base + unsigned(checksum_in(63 downto 48)) + unsigned(checksum_in(47 downto 32)) + unsigned(checksum_in(31 downto 16)) + unsigned(checksum_in(15 downto 0));
+            checksum_int <= checksum_int_base + unsigned(checksum_in(63 downto 48)) + unsigned(checksum_in(47 downto 32)) + unsigned(checksum_in(31 downto 16)) + unsigned(checksum_in(15 downto 0)) + unsigned(checksum_adjust);
             -- Sum the carry to the current result: no overflow by construction
-            -- Subtract the checksum_subtract value: used for IP pseudo-header computation
-            checksum <= not(std_logic_vector(checksum_int(31 downto 16) + checksum_int(15 downto 0) - unsigned(checksum_subtract)));
+            -- Subtract the checksum_adjust   value: used for IP pseudo-header computation
+            checksum <= not(std_logic_vector(checksum_int(31 downto 16) + checksum_int(15 downto 0)));
         end if;
     end process;
 
@@ -471,35 +502,48 @@ begin
         end if;
     end process;
 
-    -- Insert the checksum value into TX_DATA
+    -- Output bus connection: insert the checksum value into TX_DATA
+    -- 1 clock cycle latency
     insert_shift <= checksum_offset + 1 - bytes_out;
-    process(insert_en, ffifo_tx_data, checksum_out, insert_shift) begin
-            if insert_en = '0' then
-                TX_DATA <= ffifo_tx_data;
-            else
-                case insert_shift(3 downto 0) is
-                    when X"0" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 8) & checksum_out(15 downto 8);
-                    when X"1" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 16) & checksum_out;
-                    when X"2" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 24) & checksum_out & ffifo_tx_data(7 downto 0);
-                    when X"3" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 32) & checksum_out & ffifo_tx_data(15 downto 0);
-                    when X"4" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 40) & checksum_out & ffifo_tx_data(23 downto 0);
-                    when X"5" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 48) & checksum_out & ffifo_tx_data(31 downto 0);
-                    when X"6" => 
-                        TX_DATA <= ffifo_tx_data(63 downto 56) & checksum_out & ffifo_tx_data(39 downto 0);
-                    when X"7" => 
-                        TX_DATA <= checksum_out & ffifo_tx_data(47 downto 0);
-                    when X"8" => 
-                        TX_DATA <= checksum_out(7 downto 0) & ffifo_tx_data(55 downto 0);
-                    when others =>
-                        TX_DATA <= (others => '-');
-                end case;
+    process(CLK, RESET) begin
+        if (RESET = '1') then
+            TX_SRC_RDY_N    <= '1';
+        elsif (rising_edge(CLK)) then
+            if (TX_DST_RDY_N = '0') then
+                TX_REM          <= ffifo_tx_rem;
+                TX_SOF_N        <= ffifo_tx_sof_n;
+                TX_EOF_N        <= ffifo_tx_eof_n;
+                TX_SOP_N        <= ffifo_tx_sop_n;
+                TX_EOP_N        <= ffifo_tx_eop_n;
+                TX_SRC_RDY_N    <= tx_src_rdy_n_int;
+                if insert_en = '0' then
+                    TX_DATA <= ffifo_tx_data;
+                else
+                    case insert_shift(3 downto 0) is
+                        when X"0" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 8) & checksum_out(15 downto 8);
+                        when X"1" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 16) & checksum_out;
+                        when X"2" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 24) & checksum_out & ffifo_tx_data(7 downto 0);
+                        when X"3" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 32) & checksum_out & ffifo_tx_data(15 downto 0);
+                        when X"4" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 40) & checksum_out & ffifo_tx_data(23 downto 0);
+                        when X"5" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 48) & checksum_out & ffifo_tx_data(31 downto 0);
+                        when X"6" => 
+                            TX_DATA <= ffifo_tx_data(63 downto 56) & checksum_out & ffifo_tx_data(39 downto 0);
+                        when X"7" => 
+                            TX_DATA <= checksum_out & ffifo_tx_data(47 downto 0);
+                        when X"8" => 
+                            TX_DATA <= checksum_out(7 downto 0) & ffifo_tx_data(55 downto 0);
+                        when others =>
+                            TX_DATA <= (others => '-');
+                    end case;
+                end if;             
             end if;
+        end if;
     end process;
 
 end Behavioral;
