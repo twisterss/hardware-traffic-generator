@@ -22,8 +22,8 @@
 00000000
 $
 ---- Flow packet rate configuration (ID: 05)
----- Minimum inter-frame gap : 12 bytes (2C)
-2C000000
+---- Minimum inter-frame gap : 51 bytes
+33000000
 05000000
 #
 00000000
@@ -54,6 +54,111 @@ $
 ---- Checksum type: 1
 1400E400
 04045FFC
+#
+00000000
+00000000
+$
+---- Source IP increment configuration (ID: 06)
+---- Min: 1
+---- Max: 255
+---- Offset: 28
+FF000000
+06000100
+00000000
+00010380
+#
+FFFFFFFF
+FFFFFFFF
+$
+-- Skeleton sender data (ID: 01)
+-- 66 bytes, HSRP/UDP/IPv4/Ethernet
+-- Source MAC: 00:11:5c:88:c8:1b
+-- Destination MAC: 01:00:5e:00:00:02
+-- FCS: set to 0
+-- Source IP: 10.29.224.3 (0x0A1DE003)
+-- Destination IP: 224.0.0.2 (0xE0000002)
+-- IP length: 48 (0x0030)
+-- IP checksum: 0xEEDA (written 0xDAEE here) (replaced by zeroes, line of 0x1D0A)
+-- UDP source/destination port: 1985 (0x07C1)
+-- UDP checksum 0xA18B (written 0x8BA1 here) (replaced by zeroes, just above 0x0308)
+--
+-- Wireshark:
+-- 0000   01 00 5e 00 00 02 00 11 5c 88 c8 1b 08 00 45 c0
+-- 0010   00 30 00 00 00 00 01 11 ee da 0a 1d e0 03 e0 00
+-- 0020   00 02 07 c1 07 c1 00 1c a1 8b 00 00 08 03 0a 96
+-- 0030   42 00 63 69 73 63 6f 00 00 00 0a 1d e0 01
+FF000042
+01000000
+005e0001
+11000200
+1bc8885c
+c0450008
+00003000
+11010000
+1d0a0000
+00e003e0
+c1070200
+1c00c107
+00000000
+960a0308
+69630042
+006f6373
+1d0a0000
+000001e0
+00000000
+00000000
+#
+----
+---- Second flow configuration
+----
+00000000
+00000000
+$
+---- Flow packet rate configuration (ID: 05)
+---- Minimum inter-frame gap : 168 bytes
+A8000000
+05000000
+#
+00000000
+00000000
+$
+---- Ethernet FCS activation (ID: 02)
+00000000
+02000000
+#
+00000000
+00000000
+$
+---- IP Checksum configuration (ID: 03)
+---- Start offset: 14
+---- End offset: 33
+---- Checksum offset: 24
+0C000000
+0301C084
+#
+00000000
+00000000
+$
+---- UDP Checksum configuration (ID: 04)
+---- Start offset: 34
+---- End offset: maximum (FCS is set to 0)
+---- Checksum offset: 40
+---- IP header: 14
+---- Checksum type: 1
+1400E400
+04045FFC
+#
+00000000
+00000000
+$
+---- Source IP increment configuration (ID: 06)
+---- Min: 257
+---- Max: 511
+---- Offset: 28
+FF000000
+06010101
+00000000
+00010380
 #
 FFFFFFFF
 FFFFFFFF

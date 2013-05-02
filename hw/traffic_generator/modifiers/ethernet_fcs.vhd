@@ -88,7 +88,7 @@ begin
     frame_fifo : entity work.FRAME_FIFO
         generic map(
             DATA_WIDTH  => 64,
-            DEPTH       => 1
+            DEPTH       => 2
         )
         port map(
             CLK         => CLK,
