@@ -1,0 +1,43 @@
+{
+	"flow_generator": {
+		"instances": 2,
+		"modifiers": [
+			{
+				"type": "skeleton_sender",
+				"config": {
+					"id": 1
+				}
+			},
+			{
+				"type": "increment",
+				"config": {
+					"id": 6
+				}
+			},
+			{
+				"type": "checksum",
+				"config": {
+					"id": 3
+				}
+			},
+			{
+				"type": "checksum",
+				"config": {
+					"id": 4
+				}
+			},
+			{
+				"type": "ethernet_fcs",
+				"config": {
+					"id": 2
+				}
+			},
+			{
+				"type": "rate",
+				"config": {
+					"id": 5
+				}
+			}
+		]
+	}
+}
