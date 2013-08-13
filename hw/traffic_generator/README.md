@@ -28,6 +28,11 @@ The traffic generator is a pipeline structured around the FrameLink bus. The pip
 		*	`modifiers/ethernet_fcs.vhd`: overrides the Ethernet FCS field with the computed FCS for each received packet. This module is optional.
 		*	`modifiers/core/config_remover.vhd`: drops the useless configuration frames and packet headers before they are sent as generated traffic.
 
+Combov2 10G2 integration
+-------------------
+
+The file `combov2_10g2_application.vhd` is an example of `application.vhd` file to use to integrate the traffic generator on the Combov2 10G2 board. It can replace directly the example provided with the NetCOPE platform.
+
 Extending the generator
 -------------------
 
