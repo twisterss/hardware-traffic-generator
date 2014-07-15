@@ -1,7 +1,7 @@
 Hardware traffic generator
 ==========================
 
-This is a 10 Gbit/s Ethernet FPGA-based traffic generator. It is designed to be both flexible and extensible, and to be able to fill a 10Gb/s link, even with the smallest packets.
+This is a 10 Gbit/s Ethernet FPGA-based traffic generator. It is designed to be both flexible and extensible, and to be able to fill a 10Gb/s link, even with the smallest packets. It is described in ["Flexible, extensible, open-source and affordable FPGA-based traffic generator" in HPPN '13](http://dl.acm.org/citation.cfm?id=2465843).
 
 Environment
 -----------
